@@ -1,10 +1,21 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#263238</item>
+        <item name="colorPrimaryVariant">#000a12</item>
+        <item name="colorOnPrimary">#e0e0e0</item>
+        <item name="colorSecondary">#f06292</item>
+        <item name="colorSecondaryVariant">#ff94c2</item>
+        <item name="colorOnSecondary">#424242</item>
+        <item name="colorError">#F44336</item>
+        <item name="colorOnError">#FFFFFF</item>
+        <item name="colorSurface">#4f5b62</item>
+        <item name="colorOnSurface">#e0e0e0</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorOnBackground">#e0e0e0</item>
+
+        <item name="colorPrimaryDark">#263238</item>
     </style>
 </resources>

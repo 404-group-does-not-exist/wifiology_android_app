@@ -2,7 +2,6 @@ package com.example.wifiology;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import cz.msebera.android.httpclient.Header;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         clearFields();
         setStatus("",false);
 
+        AsyncHTTPClient.setup(this);
         attemptLogin();
     }
 
@@ -116,21 +118,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     void registerUser(){
         statusReg.setText("");
-        RequestParams params = new RequestParams();
-        params.put("emailAddress",emailReg.getText());
-        params.put("userName",usernameReg.getText());
-        params.put("password",passwordReg.getText());
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("emailAddress",emailReg.getText().toString());
+        params.put("userName",usernameReg.getText().toString());
+        params.put("password",passwordReg.getText().toString());
         params.put("description","In app registration!");
-        AsyncHTTPClient.post("users", params, new AsyncHttpResponseHandler() {
+        AsyncHTTPClient.postString("users", params,false, new Response.Listener<String>() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            public void onResponse(String response) {
                 setStatus("Registration Successful, Logging in...",true);
                 login(usernameReg.getText().toString(),passwordReg.getText().toString());
             }
-
+        }, new Response.ErrorListener() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                setStatus("Error " + statusCode + ": " + error.getMessage(),false);
+            public void onErrorResponse(VolleyError error) {
+                setStatus("Error " + "" + ": " + error.getMessage(),false);
             }
         });
     }
@@ -142,21 +144,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     void login(final String username, final String password){
         status.setText("");
         final Context context = getApplicationContext();
-        AsyncHTTPClient.auth(username, password, new AsyncHttpResponseHandler() {
+        AsyncHTTPClient.auth(username, password, new Response.Listener<String>() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            public void onResponse(String response) {
                 setStatus("Login Successful!",true);
                 SharedPrefs.putString(SharedPrefs.username,username,context);
                 SharedPrefs.putString(SharedPrefs.password,password,context);
 
                 Intent intent = new Intent(context, DataActivity.class);
                 startActivity(intent);
-
             }
-
+        }, new Response.ErrorListener() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                setStatus("Error " + statusCode + ": " + error.getMessage(),false);
+            public void onErrorResponse(VolleyError error) {
+                setStatus("Error " + "" + ": " + error.getMessage(),false);
 
                 if (loginLayout.getVisibility() == View.GONE && loginLayout.getVisibility() == View.GONE){
                     loginLayout.setVisibility(View.VISIBLE);
