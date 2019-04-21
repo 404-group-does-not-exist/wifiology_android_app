@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Collection;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -16,10 +17,10 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
 
     public static final String KEY_SSID = "ssid";
 
-    List<NetworkData> networksList;
+    NetworkData[] networksList;
     Context context;
 
-    public NetworkAdapter(List<NetworkData> nets, Context con){
+    public NetworkAdapter(NetworkData[] nets, Context con){
         networksList = nets;
         context = con;
     }
@@ -33,8 +34,16 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        final NetworkData network = networksList.get(position);
+        final NetworkData network = networksList[position];
         holder.ssidText.setText(network.getSsid());
+        if (network.getEarliestTime() != null) {
+            String textBegin = "Time of first measurement: " + network.getEarliestTime().toString();
+            holder.timeBegin.setText(textBegin);
+        }
+        if (network.getLatestTime() != null) {
+            String textEnd = "Time of last measurement: " + network.getLatestTime().toString();
+            holder.timeEnd.setText(textEnd);
+        }
         boolean expanded = network.getExpanded();
         holder.subLayout.setVisibility(expanded ? View.VISIBLE : View.GONE);
 
@@ -49,13 +58,15 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
 
     @Override
     public int getItemCount(){
-        return networksList.size();
+        return networksList.length;
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView ssidText;
+        public TextView timeBegin;
+        public TextView timeEnd;
         public LinearLayout layout;
         public LinearLayout subLayout;
 
@@ -63,6 +74,8 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
             super(itemView);
 
             ssidText = itemView.findViewById(R.id.networkSSIDText);
+            timeBegin = itemView.findViewById(R.id.timeBegin);
+            timeEnd = itemView.findViewById(R.id.timeEnd);
             layout = itemView.findViewById(R.id.linearLayoutNetworks);
             subLayout = itemView.findViewById(R.id.linearLayoutNetworksExpanded);
         }

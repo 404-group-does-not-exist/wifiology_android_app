@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                setStatus("Error " + "" + ": " + error.getMessage(),false);
+                setStatus("Error " + "" + ": " + error.toString(),false);
             }
         });
     }
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                setStatus("Error " + "" + ": " + error.getMessage(),false);
+                setStatus("Error " + "" + ": " + error.toString(),false);
 
                 if (loginLayout.getVisibility() == View.GONE && loginLayout.getVisibility() == View.GONE){
                     loginLayout.setVisibility(View.VISIBLE);

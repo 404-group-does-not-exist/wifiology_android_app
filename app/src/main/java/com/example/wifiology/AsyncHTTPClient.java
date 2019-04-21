@@ -21,11 +21,13 @@ import java.util.Map;
 
 public class AsyncHTTPClient {
     private static final String BASE_URL = "http://100.115.92.204:5000/api/1.0/";
+    //private static final String BASE_URL = "https://wifiology-pr-25.herokuapp.com/api/1.0/";
+    //private static final String BASE_URL = "https://wifiology.copesystems.com/api/1.0/";
 
     private static RequestQueue queue;
     private static Context context;
-    private static String username;
-    private static String password;
+    private static String username = "";
+    private static String password = "";
 
     public static void setup(Context con){
         if (queue == null) {
@@ -37,7 +39,7 @@ public class AsyncHTTPClient {
     public static void auth (String _userName, String _password, Response.Listener<String> responseHandler,Response.ErrorListener errorHandler){
         username = _userName;
         password = _password;
-        getString("users/me",null,true,responseHandler,errorHandler);
+        getString("users/",null,true,responseHandler,errorHandler);
     }
 
     public static void getString(String url, final HashMap<String, String> data,final boolean useAuth , Response.Listener<String> responseHandler,Response.ErrorListener errorHandler) {
@@ -75,12 +77,11 @@ public class AsyncHTTPClient {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 if (useAuth) {
-                    Map<String, String> headers = super.getHeaders();
-                    // add headers <key,value>
-                    String credentials = username + ":" + password;
+                    Map<String, String> headers = new HashMap<>();
+                    String credentials = username+":"+password;
                     String auth = "Basic "
-                            + Base64.encodeToString(credentials.getBytes(),
-                            Base64.NO_WRAP);
+                            + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+                    headers.put("Content-Type", "application/json");
                     headers.put("Authorization", auth);
                     return headers;
                 }else{
