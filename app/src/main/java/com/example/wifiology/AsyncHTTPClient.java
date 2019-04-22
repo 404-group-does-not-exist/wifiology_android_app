@@ -17,12 +17,13 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class AsyncHTTPClient {
-    private static final String BASE_URL = "http://100.115.92.204:5000/api/1.0/";
+    //private static final String BASE_URL = "http://100.115.92.204:5000/api/1.0/";
     //private static final String BASE_URL = "https://wifiology-pr-25.herokuapp.com/api/1.0/";
-    //private static final String BASE_URL = "https://wifiology.copesystems.com/api/1.0/";
+    private static final String BASE_URL = "https://wifiology.copesystems.com/api/1.0/";
 
     private static RequestQueue queue;
     private static Context context;
@@ -39,11 +40,25 @@ public class AsyncHTTPClient {
     public static void auth (String _userName, String _password, Response.Listener<String> responseHandler,Response.ErrorListener errorHandler){
         username = _userName;
         password = _password;
-        getString("users/",null,true,responseHandler,errorHandler);
+        getString("users/me/",null,true,responseHandler,errorHandler);
     }
 
     public static void getString(String url, final HashMap<String, String> data,final boolean useAuth , Response.Listener<String> responseHandler,Response.ErrorListener errorHandler) {
-        StringRequest getRequest = new StringRequest(Request.Method.GET, getAbsoluteUrl(url), responseHandler,errorHandler){
+        String uri = getAbsoluteUrl(url);
+        if (data != null && data.size() > 0) {
+            uri += "?";
+            String[] keys = new String[data.size()];
+            keys = data.keySet().toArray(keys);
+            for (int i = 0; i < keys.length; i++) {
+                String val = data.get(keys[i]);
+                uri += keys[i] + "=" + val;
+                if (i < keys.length - 1) {
+                    uri += "&";
+                }
+            }
+        }
+        //Log.e("TESTING",uri);
+        StringRequest getRequest = new StringRequest(Request.Method.GET, uri, responseHandler,errorHandler){
             @Override
             protected Map<String, String> getParams()
             {

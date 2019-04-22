@@ -8,6 +8,7 @@ public class NetworkData {
     private boolean expanded;
     private Date earliestTime;
     private Date latestTime;
+    private String location;
 
     public NetworkData(String _ssid){
         ssid = _ssid;
@@ -39,6 +40,14 @@ public class NetworkData {
 
     public Date getLatestTime(){
         return latestTime;
+    }
+
+    public void setLocation(String loc){
+        location = loc;
+    }
+
+    public String getLocation(){
+        return location;
     }
 
 }

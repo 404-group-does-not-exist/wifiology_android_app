@@ -44,6 +44,10 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
             String textEnd = "Time of last measurement: " + network.getLatestTime().toString();
             holder.timeEnd.setText(textEnd);
         }
+        if (network.getLocation() != null) {
+            String loc = "Measurement Location: " + network.getLocation();
+            holder.location.setText(loc);
+        }
         boolean expanded = network.getExpanded();
         holder.subLayout.setVisibility(expanded ? View.VISIBLE : View.GONE);
 
@@ -64,9 +68,7 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView ssidText;
-        public TextView timeBegin;
-        public TextView timeEnd;
+        public TextView ssidText,timeBegin,timeEnd,location;
         public LinearLayout layout;
         public LinearLayout subLayout;
 
@@ -76,6 +78,7 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
             ssidText = itemView.findViewById(R.id.networkSSIDText);
             timeBegin = itemView.findViewById(R.id.timeBegin);
             timeEnd = itemView.findViewById(R.id.timeEnd);
+            location = itemView.findViewById(R.id.location);
             layout = itemView.findViewById(R.id.linearLayoutNetworks);
             subLayout = itemView.findViewById(R.id.linearLayoutNetworksExpanded);
         }

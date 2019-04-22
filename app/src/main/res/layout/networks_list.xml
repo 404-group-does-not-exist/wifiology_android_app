@@ -46,6 +46,14 @@
                     android:layout_marginBottom="8dp"
                     android:text="Time of last measurement: "/>
 
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Measurement Location: "/>
+
 
             </LinearLayout>
 

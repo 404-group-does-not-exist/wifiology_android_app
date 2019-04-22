@@ -137,7 +137,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void getNodes(){
-        AsyncHTTPClient.getString("users/me/nodes", null, true, new Response.Listener<String>() {
+        AsyncHTTPClient.getString("nodes", null, true, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -147,11 +147,12 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
                     for (int i = 0; i < array.length(); i++){
                         JSONObject ob = array.getJSONObject(i);
                         int nodeId = ob.getInt("nodeID");
+                        String nodeLocation = ob.getString("nodeLocation");
                         boolean isLast = false;
                         if (i == array.length() - 1){
                             isLast = true;
                         }
-                        getMeasurements(nodeId,isLast);
+                        getMeasurements(nodeId,nodeLocation,isLast);
                     }
                 }catch (JSONException error){
                     Log.e("Wifiology","Error " + "" + ": " + error.toString());
@@ -166,17 +167,21 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //for now: get service sets, avg number of stations on the service set, range of times of measurement
-    void getMeasurements(int nodeId, final boolean isLast){
-        //put stuff for last measurement id and shit here later maybe i dunno
-        AsyncHTTPClient.getString("nodes/" + nodeId + "/measurements", null, true, new Response.Listener<String>() {
+    void getMeasurements(int nodeId, final String location, final boolean isLast){
+        HashMap<String, String> params = new HashMap<String, String>();
+        //params.put("channel","10");
+        params.put("limit","20");
+        //params.put("lastPriorMeasurementID","potato");
+        AsyncHTTPClient.getString("nodes/" + nodeId + "/measurements", params, true, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //run this on its own thread later?
                 try {
                     JSONArray array = new JSONArray(response);
-                    SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.000Z'", Locale.US);
+                    SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+                    //Log.e("TEST",array.length() + "");
 
-                    for (int i = 0; i < array.length(); i++){
+                    for (int i = array.length()-1; i >= 0; i--){
                         JSONObject ob = array.getJSONObject(i);
                         JSONObject obM = ob.getJSONObject("measurement");
 
@@ -194,7 +199,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
                                 networksList.put(setId,newData);
                             }
                         }
-                        if (i == array.length() - 1){
+                        if (i == 0){
                             String end = obM.getString("measurementEndTime");
                             Date endDate = parseDate(end,dateForm);
 
@@ -202,6 +207,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
                             keys = networksList.keySet().toArray(keys);
                             for (int j = 0; j < keys.length; j++){
                                 networksList.get(keys[j]).setLatestTime(endDate);
+                                networksList.get(keys[j]).setLocation(location);
                             }
                         }
                     }
