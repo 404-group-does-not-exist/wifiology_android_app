@@ -36,17 +36,18 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         final NetworkData network = networksList[position];
         holder.ssidText.setText(network.getSsid());
-        if (network.getEarliestTime() != null) {
-            String textBegin = "Time of first measurement: " + network.getEarliestTime().toString();
-            holder.timeBegin.setText(textBegin);
-        }
-        if (network.getLatestTime() != null) {
-            String textEnd = "Time of last measurement: " + network.getLatestTime().toString();
-            holder.timeEnd.setText(textEnd);
-        }
-        if (network.getLocation() != null) {
-            String loc = "Measurement Location: " + network.getLocation();
-            holder.location.setText(loc);
+        if (network.getBssids() != null && network.getBssids().size() > 0) {
+            String res = "BSSIDs: ";
+            for (int i = 0; i < network.getBssids().size(); i++){
+                if (i > 0){
+                    res += "            ";
+                }
+                res += network.getBssids().get(i);
+                if (i < network.getBssids().size() -1) {
+                    res += "\n";
+                }
+            }
+            holder.bssidText.setText(res);
         }
         boolean expanded = network.getExpanded();
         holder.subLayout.setVisibility(expanded ? View.VISIBLE : View.GONE);
@@ -68,7 +69,7 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView ssidText,timeBegin,timeEnd,location;
+        public TextView ssidText,bssidText;//,location;
         public LinearLayout layout;
         public LinearLayout subLayout;
 
@@ -76,9 +77,7 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
             super(itemView);
 
             ssidText = itemView.findViewById(R.id.networkSSIDText);
-            timeBegin = itemView.findViewById(R.id.timeBegin);
-            timeEnd = itemView.findViewById(R.id.timeEnd);
-            location = itemView.findViewById(R.id.location);
+            bssidText = itemView.findViewById(R.id.bssids);
             layout = itemView.findViewById(R.id.linearLayoutNetworks);
             subLayout = itemView.findViewById(R.id.linearLayoutNetworksExpanded);
         }

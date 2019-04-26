@@ -1,17 +1,18 @@
 package com.example.wifiology;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class NetworkData {
+public class NetworkData implements Comparable<NetworkData>{
 
     private String ssid;
     private boolean expanded;
-    private Date earliestTime;
-    private Date latestTime;
-    private String location;
+    ArrayList<String> bssids;
 
     public NetworkData(String _ssid){
         ssid = _ssid;
+        bssids = new ArrayList<String>();
     }
 
     public String getSsid(){
@@ -26,28 +27,18 @@ public class NetworkData {
         expanded = _expanded;
     }
 
-    public void setEarliestTime(Date d){
-        earliestTime = d;
+    public void addBssid(String id) {
+        bssids.add(id);
     }
 
-    public void setLatestTime(Date d){
-        latestTime = d;
+    public ArrayList<String> getBssids(){
+        return bssids;
     }
 
-    public Date getEarliestTime(){
-        return earliestTime;
-    }
+    @Override
+    public int compareTo(NetworkData data) {
+        return ssid.compareTo(data.getSsid());
 
-    public Date getLatestTime(){
-        return latestTime;
-    }
-
-    public void setLocation(String loc){
-        location = loc;
-    }
-
-    public String getLocation(){
-        return location;
     }
 
 }

@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 SharedPrefs.putString(SharedPrefs.username,username,context);
                 SharedPrefs.putString(SharedPrefs.password,password,context);
 
-                Intent intent = new Intent(context, DataActivity.class);
+                Intent intent = new Intent(context, NodeActivity.class);
                 startActivity(intent);
             }
         }, new Response.ErrorListener() {
