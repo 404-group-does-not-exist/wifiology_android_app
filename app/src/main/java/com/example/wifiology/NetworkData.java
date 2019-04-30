@@ -8,6 +8,7 @@ public class NetworkData implements Comparable<NetworkData>{
 
     private String ssid;
     private boolean expanded;
+    private float mngtFrameRatio = -24f;
     ArrayList<String> bssids;
 
     public NetworkData(String _ssid){
@@ -33,6 +34,14 @@ public class NetworkData implements Comparable<NetworkData>{
 
     public ArrayList<String> getBssids(){
         return bssids;
+    }
+
+    public float getMngtFrameRatio() {
+        return mngtFrameRatio;
+    }
+
+    public void setMngtFrameRatio(float mngtFrameRatio) {
+        this.mngtFrameRatio = mngtFrameRatio;
     }
 
     @Override

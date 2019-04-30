@@ -322,6 +322,16 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
                                     data.addBssid(bssid);
                                 }
                             }
+                            try{
+                                JSONObject ob3 = ob2.getJSONObject("jitterMeasurement");
+                                float avgJitter = (ob3.getInt("avgJitter") / 1000f);
+                                float interval = ob3.getInt("beaconInterval");
+                                float res = avgJitter / interval;
+                                NetworkData data = networksList.get(serviceName);
+                                data.setMngtFrameRatio(res);
+                            }catch (JSONException error){
+                                Log.e("Wifiology","Error" + "" + ": " + error.toString());
+                            }
                         }
                     }
 

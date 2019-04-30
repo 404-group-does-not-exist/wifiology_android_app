@@ -48,6 +48,15 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
                 }
             }
             holder.bssidText.setText(res);
+            String busy = "Unknown";
+            if (network.getMngtFrameRatio() != -24f){
+                if (network.getMngtFrameRatio() > 5f){
+                    busy = "Yes";
+                }else{
+                    busy = "No";
+                }
+            }
+            holder.isBusyText.setText("Is Busy: "+ busy);
         }
         boolean expanded = network.getExpanded();
         holder.subLayout.setVisibility(expanded ? View.VISIBLE : View.GONE);
@@ -69,7 +78,7 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView ssidText,bssidText;//,location;
+        public TextView ssidText,bssidText,isBusyText;//,location;
         public LinearLayout layout;
         public LinearLayout subLayout;
 
@@ -78,6 +87,7 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
 
             ssidText = itemView.findViewById(R.id.networkSSIDText);
             bssidText = itemView.findViewById(R.id.bssids);
+            isBusyText = itemView.findViewById(R.id.isBusy);
             layout = itemView.findViewById(R.id.linearLayoutNetworks);
             subLayout = itemView.findViewById(R.id.linearLayoutNetworksExpanded);
         }
